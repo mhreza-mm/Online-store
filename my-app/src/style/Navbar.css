@@ -1,0 +1,29 @@
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #dadada;
+  padding: 16px 32px;
+  font-family: Vazirmatn, Tahoma, sans-serif;
+  background: #fff;
+  direction: rtl;
+}
+
+.navbar-user {
+  font-size: 15px;
+}
+
+.navbar-title {
+  font-weight: bold;
+  font-size: 22px;
+  letter-spacing: 2px;
+}
+
+.navbar-cart {
+  font-size: 15px;
+  background: #229d54;
+  color: #fff;
+  padding: 3px 13px;
+  border-radius: 16px;
+  font-weight: bold;
+}
