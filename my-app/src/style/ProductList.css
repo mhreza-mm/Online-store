@@ -1,0 +1,9 @@
+.product-list-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: center;
+  margin: 38px 0 0 0;
+  direction: rtl;
+  font-family: Vazirmatn, Tahoma, sans-serif;
+}
