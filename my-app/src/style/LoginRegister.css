@@ -1,0 +1,27 @@
+.login-panel-container {
+  background: #f6f8fa;
+  border: 1px solid #dedede;
+  border-radius: 12px;
+  padding: 24px 18px;
+  margin: 24px 10px;
+  min-width: 220px;
+  font-family: Vazirmatn, Tahoma, sans-serif;
+  direction: rtl;
+}
+
+.login-panel-container h3 {
+  font-size: 17px;
+  margin-bottom: 12px;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 8px 0;
+  background: #229d54;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  margin-top: 15px;
+  cursor: pointer;
+  font-size: 15px;
+}
