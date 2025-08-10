@@ -1,29 +1,60 @@
 .navbar-container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #dadada;
-  padding: 16px 32px;
-  font-family: Vazirmatn, Tahoma, sans-serif;
+  justify-content: space-between;
   background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 12px 24px;
   direction: rtl;
+  font-family: Vazirmatn, Tahoma, sans-serif;
 }
 
-.navbar-user {
-  font-size: 15px;
+.navbar-right {
+  flex: 0 0 auto;
 }
 
-.navbar-title {
+.navbar-logo {
   font-weight: bold;
-  font-size: 22px;
-  letter-spacing: 2px;
+  font-size: 20px;
+  text-decoration: none;
+  color: #222;
+}
+
+.navbar-middle {
+  flex: 0 0 400px; /* وسط ثابت */
+}
+
+.navbar-search {
+  width: 100%;
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Login / Logout Buttons */
+.navbar-login-btn,
+.navbar-logout-btn {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: none;
 }
 
 .navbar-cart {
-  font-size: 15px;
+  padding: 6px 12px;
+  border-radius: 6px;
   background: #229d54;
   color: #fff;
-  padding: 3px 13px;
-  border-radius: 16px;
   font-weight: bold;
+  text-decoration: none;
 }
