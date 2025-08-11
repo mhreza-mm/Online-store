@@ -1,0 +1,27 @@
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin: 23px 0 40px 0;
+  direction: rtl;
+  font-family: Vazirmatn, Tahoma, sans-serif;
+}
+
+.page-btn {
+  border-radius: 50%;
+  width: 31px;
+  height: 31px;
+  background: #fff;
+  color: #229d54;
+  border: 1px solid #229d54;
+  margin: 0 4px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.page-btn.selected, .page-btn:focus {
+  background: #229d54;
+  color: #fff;
+  outline: none;
+}
