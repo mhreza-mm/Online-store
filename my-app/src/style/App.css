@@ -1,0 +1,47 @@
+/* فونت مناسب فارسی (در صورت نیاز می‌تونی Vazirmatn رو CDN لود کنی) */
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+
+.app-container {
+  direction: rtl;
+  font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+/* ساختار کلی بدنه صفحه */
+.main-body {
+  display: flex;
+  gap: 28px;
+  justify-content: center;
+  margin: 40px auto 0 auto;
+  max-width: 1250px;
+  width: 100%;
+}
+
+/* سایدبار (ورود/خروج) چپ صفحه */
+.sidebar {
+  width: 260px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 18px #eef0f8;
+  padding: 36px 20px;
+  min-height: 400px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* محتوای اصلی (لیست محصولات و pagination) */
+.main-content {
+  flex: 1;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 18px #eef0f8;
+  padding: 38px 28px 18px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  overflow-x: auto;
+}
