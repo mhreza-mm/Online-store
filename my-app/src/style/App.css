@@ -1,4 +1,4 @@
-/* فونت مناسب فارسی (در صورت نیاز می‌تونی Vazirmatn رو CDN لود کنی) */
+
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
 
 .app-container {
@@ -8,7 +8,7 @@
   min-height: 100vh;
 }
 
-/* ساختار کلی بدنه صفحه */
+
 .main-body {
   display: flex;
   gap: 28px;
@@ -18,7 +18,7 @@
   width: 100%;
 }
 
-/* سایدبار (ورود/خروج) چپ صفحه */
+
 .sidebar {
   width: 260px;
   background: #fff;
@@ -32,7 +32,7 @@
   align-items: center;
 }
 
-/* محتوای اصلی (لیست محصولات و pagination) */
+
 .main-content {
   flex: 1;
   background: #fff;

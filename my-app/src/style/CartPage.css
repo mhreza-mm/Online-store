@@ -20,10 +20,10 @@
 }
 
 .cart-item-image {
-  width: 80px; /* کوچکتر از صفحه اصلی */
+  width: 80px; 
   height: 80px;
   object-fit: contain;
-  margin-left: 15px; /* چون راست‌چین هست، فاصله سمت چپ */
+  margin-left: 15px; 
 }
 
 .cart-item-info {

@@ -21,7 +21,7 @@
 }
 
 .navbar-middle {
-  flex: 0 0 400px; /* وسط ثابت */
+  flex: 0 0 400px; 
 }
 
 .navbar-search {
@@ -38,7 +38,7 @@
   gap: 10px;
 }
 
-/* Login / Logout Buttons */
+
 .navbar-login-btn,
 .navbar-logout-btn {
   padding: 6px 12px;

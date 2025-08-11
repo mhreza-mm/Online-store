@@ -1,5 +1,5 @@
 .login-wrapper {
-  height: calc(100vh - 60px); /* 60px ارتفاع تقریبی Navbar */
+  height: calc(100vh - 60px);
   background-color: #f5f6fa;
   display: flex;
   justify-content: center;

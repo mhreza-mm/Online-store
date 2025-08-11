@@ -1,12 +1,12 @@
 .product-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* سه ستون ثابت */
-  gap: 20px; /* فاصله بین کارت‌ها */
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 20px; 
   padding: 20px;
 }
 
 .product-card {
-  background-color: #fff8e1; /* کرم ملایم */
+  background-color: #fff8e1; 
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   overflow: hidden;
@@ -18,8 +18,8 @@
 
 .product-card img {
   width: 100%;
-  height: 220px; /* ارتفاع ثابت */
-  object-fit: cover; /* فیت شدن تو باکس بدون کشیدگی */
+  height: 220px; 
+  object-fit: cover; 
   border-radius: 8px;
 }
 
@@ -46,7 +46,6 @@
   margin-top: auto;
 }
 
-/* واکنش‌گرا برای موبایل */
 @media (max-width: 768px) {
   .product-list {
     grid-template-columns: repeat(2, 1fr);
