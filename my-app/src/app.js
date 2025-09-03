@@ -14,6 +14,7 @@ const App = () => {
   const [cart, setCart] = useState([]);
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
+  const[searchValue,setSearchValue]=useState("");
   const pageSize = 9;
 
   useEffect(() => {
@@ -74,11 +75,13 @@ const App = () => {
   }
   
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const filteredProducts = products.filter(item =>
+    item.title.toLowerCase().includes(searchValue.toLowerCase())
+);
 
-  
-  const startIdx = (page - 1) * pageSize;
-  const showProducts = products.slice(startIdx, startIdx + pageSize);
-  const totalPages = Math.ceil(products.length / pageSize);
+const startIdx = (page - 1) * pageSize;
+const showProducts = filteredProducts.slice(startIdx, startIdx + pageSize);
+const totalPages = Math.ceil(filteredProducts.length / pageSize);
 
   return (
     <div className="app-container">
@@ -87,6 +90,8 @@ const App = () => {
         user={user}
         onLogin={handleLogin}
         onLogout={handleLogout}
+        searchValue={searchValue}
+        onSearchChange={setSearchValue}
       />
 
       <div className="main-body">
