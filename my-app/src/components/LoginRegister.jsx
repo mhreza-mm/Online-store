@@ -31,7 +31,7 @@ const LoginRegister = ({ onLogin }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="submit" className="login-btn">ورود</button>
+          <button type="submit" className="login-btn">ورود / ثبت نام </button>
         </form>
       </div>
     </div>
