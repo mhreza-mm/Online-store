@@ -1,0 +1,38 @@
+###
+GET http://localhost:8080/api/products
+Content-Type: application/json
+
+
+###
+GET http://localhost:8080/api/products/1
+Content-Type: application/json
+
+
+###
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "title": "iphone 16 ",
+  "price": 560,
+  "image": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-16.jpg"
+
+}
+
+
+###
+PUT http://localhost:8080/api/products/1
+Content-Type: application/json
+
+{
+  "title": "Updated Product",
+  "price": 120.0,
+  "image": "https://example.com/image-updated.jpg",
+  "description": "Updated description"
+}
+
+
+###
+DELETE http://localhost:8080/api/products/1
+Content-Type: application/json
+÷
