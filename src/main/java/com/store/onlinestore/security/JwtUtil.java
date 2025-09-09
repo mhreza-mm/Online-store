@@ -41,13 +41,13 @@ public class JwtUtil {
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = Jwts.parser() // جدید
-                .verifyWith((javax.crypto.SecretKey) key) // Cast لازم برای SecretKey
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        final Claims claims = Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token)
+                .getBody();
         return claimsResolver.apply(claims);
     }
+
 
 
 
