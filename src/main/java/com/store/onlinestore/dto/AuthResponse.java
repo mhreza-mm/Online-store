@@ -13,5 +13,6 @@ public class AuthResponse {
     private String massage;
     private Long userId;
     private String username;
+    private String token;
 
 }
