@@ -27,7 +27,7 @@ public class ProductController {
     public Product getProductById(@PathVariable Long id){
         return productService.getProductById(id);
     }
-    @PostMapping("/{id}")
+    @PostMapping
     public Product createProduct(@RequestBody Product product){
         return productService.createProduct(product);
     }
