@@ -9,108 +9,81 @@ import CartPage from "./components/CartPage";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { fetchProducts } from "./api/Products";
 
-// کامپوننت مسیر محافظت‌شده
 const ProtectedRoute = ({ children }) => {
     const token = localStorage.getItem("token");
     return token ? children : <Navigate to="/login" />;
 };
 
-// کامپوننت مسیر ادمین
 const AdminRoute = ({ children }) => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
     return token && role === "ADMIN" ? children : <Navigate to="/login" />;
 };
 
-const App = () => {
+export default function App() {
     const [user, setUser] = useState(null);
     const [cart, setCart] = useState([]);
     const [products, setProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const [page, setPage] = useState(1);
     const [searchValue, setSearchValue] = useState("");
+    const [selectedType, setSelectedType] = useState("");
+    const [selectedBrand, setSelectedBrand] = useState("");
     const pageSize = 10;
 
-    // خواندن اطلاعات کاربر و نقش از localStorage بعد از reload
     useEffect(() => {
         const username = localStorage.getItem("username");
         const role = localStorage.getItem("role");
-        if (username) {
-            setUser({ name: username, role });
-        }
+        if (username) setUser({ name: username, role });
     }, []);
 
-    // گرفتن محصولات از API
     useEffect(() => {
-        const fetchData = async () => {
+        (async () => {
             try {
                 const data = await fetchProducts();
                 setProducts(data);
+                setFilteredProducts(data);
             } catch (err) {
                 console.error("خطا در دریافت محصولات", err);
             }
-        };
-        fetchData();
+        })();
     }, []);
+
+    useEffect(() => {
+        let data = [...products];
+        if (searchValue.trim()) {
+            data = data.filter((p) =>
+                p.title.toLowerCase().includes(searchValue.toLowerCase())
+            );
+        }
+        if (selectedType) {
+            data = data.filter((p) => p.type === selectedType);
+        }
+        if (selectedBrand) {
+            data = data.filter((p) => p.brand === selectedBrand);
+        }
+        setFilteredProducts(data);
+        setPage(1);
+    }, [products, searchValue, selectedType, selectedBrand]);
 
     const handleAddToCart = (product) => {
         if (!user) {
-            alert("برای افزودن به سبد خرید، ابتدا وارد حساب کاربری خود شوید.");
+            alert("برای افزودن به سبد خرید وارد شوید.");
             window.location.href = "/login";
             return;
         }
         setCart((prev) => {
-            const existing = prev.find(item => item.id === product.id);
-            if (existing) {
-                return prev.map(item =>
-                    item.id === product.id
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item
+            const exists = prev.find((item) => item.id === product.id);
+            if (exists) {
+                return prev.map((i) =>
+                    i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
                 );
-            } else {
-                return [...prev, { ...product, quantity: 1 }];
             }
+            return [...prev, { ...product, quantity: 1 }];
         });
     };
 
-    const handleLogin = (userobj) => {
-        setUser(userobj);
-    };
-
-    const handleLogout = () => {
-        setUser(null);
-        setCart([]);
-        localStorage.removeItem("token");
-        localStorage.removeItem("username");
-        localStorage.removeItem("role");
-    };
-
-    const handleIncrease = (id) => {
-        setCart(prev =>
-            prev.map(item =>
-                item.id === id
-                    ? { ...item, quantity: item.quantity + 1 }
-                    : item
-            )
-        );
-    };
-
-    const handleDecrease = (id) => {
-        setCart(prev =>
-            prev
-                .map(item =>
-                    item.id === id
-                        ? { ...item, quantity: Math.max(item.quantity - 1, 0) }
-                        : item
-                )
-                .filter(item => item.quantity > 0)
-        );
-    };
-
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    const filteredProducts = products.filter(item =>
-        item.title.toLowerCase().includes(searchValue.toLowerCase())
-    );
-
     const startIdx = (page - 1) * pageSize;
     const showProducts = filteredProducts.slice(startIdx, startIdx + pageSize);
     const totalPages = Math.ceil(filteredProducts.length / pageSize);
@@ -120,73 +93,105 @@ const App = () => {
             <Navbar
                 cartCount={totalItems}
                 user={user}
-                onLogin={handleLogin}
-                onLogout={handleLogout}
+                onLogin={setUser}
+                onLogout={() => {
+                    setUser(null);
+                    setCart([]);
+                    localStorage.clear();
+                }}
                 searchValue={searchValue}
                 onSearchChange={setSearchValue}
+                products={products}
+                onFilter={(type, brand) => {
+                    setSelectedType(type);
+                    setSelectedBrand(brand);
+                }}
             />
 
-            <div className="main-body">
-                <main className="main-content">
-                    <Routes>
-                        <Route
-                            path="/"
-                            element={
-                                <>
-                                    <ProductList
-                                        products={showProducts}
-                                        cart={cart}
-                                        onAddToCart={handleAddToCart}
-                                        onIncrease={handleIncrease}
-                                        onDecrease={handleDecrease}
-                                    />
-                                    <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
-                                </>
-                            }
-                        />
-
-                        <Route path="/login" element={<LoginRegister onLogin={handleLogin} />} />
-
-                        {/* مسیر محافظت‌شده برای کاربر عادی */}
-                        <Route
-                            path="/user"
-                            element={
-                                <ProtectedRoute>
-                                    <UserPanel user={user} onLogout={handleLogout} />
-                                </ProtectedRoute>
-                            }
-                        />
-
-                        {/* مسیر نمونه برای ادمین */}
-                        <Route
-                            path="/admin"
-                            element={
-                                <AdminRoute>
-                                    <div style={{ padding: "20px" }}>
-                                        <h2>پنل مدیریت</h2>
-                                        <p>فقط ادمین می‌تواند این صفحه را ببیند.</p>
-                                    </div>
-                                </AdminRoute>
-                            }
-                        />
-
-                        <Route
-                            path="/cart"
-                            element={
-                                <ProtectedRoute>
-                                    <CartPage
-                                        onIncrease={handleIncrease}
-                                        onDecrease={handleDecrease}
-                                        cart={cart}
-                                    />
-                                </ProtectedRoute>
-                            }
-                        />
-                    </Routes>
-                </main>
-            </div>
+            <main className="main-content">
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            <>
+                                <ProductList
+                                    products={showProducts}
+                                    cart={cart}
+                                    onAddToCart={handleAddToCart}
+                                    onIncrease={(id) =>
+                                        setCart((prev) =>
+                                            prev.map((i) =>
+                                                i.id === id ? { ...i, quantity: i.quantity + 1 } : i
+                                            )
+                                        )
+                                    }
+                                    onDecrease={(id) =>
+                                        setCart((prev) =>
+                                            prev
+                                                .map((i) =>
+                                                    i.id === id
+                                                        ? { ...i, quantity: Math.max(i.quantity - 1, 0) }
+                                                        : i
+                                                )
+                                                .filter((i) => i.quantity > 0)
+                                        )
+                                    }
+                                />
+                                <Pagination
+                                    page={page}
+                                    totalPages={totalPages}
+                                    onPageChange={setPage}
+                                />
+                            </>
+                        }
+                    />
+                    <Route path="/login" element={<LoginRegister onLogin={setUser} />} />
+                    <Route
+                        path="/user"
+                        element={
+                            <ProtectedRoute>
+                                <UserPanel user={user} onLogout={() => setUser(null)} />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin"
+                        element={
+                            <AdminRoute>
+                                <div style={{ padding: "20px" }}>پنل مدیریت</div>
+                            </AdminRoute>
+                        }
+                    />
+                    <Route
+                        path="/cart"
+                        element={
+                            <ProtectedRoute>
+                                <CartPage
+                                    cart={cart}
+                                    onIncrease={(id) =>
+                                        setCart((prev) =>
+                                            prev.map((i) =>
+                                                i.id === id ? { ...i, quantity: i.quantity + 1 } : i
+                                            )
+                                        )
+                                    }
+                                    onDecrease={(id) =>
+                                        setCart((prev) =>
+                                            prev
+                                                .map((i) =>
+                                                    i.id === id
+                                                        ? { ...i, quantity: Math.max(i.quantity - 1, 0) }
+                                                        : i
+                                                )
+                                                .filter((i) => i.quantity > 0)
+                                        )
+                                    }
+                                />
+                            </ProtectedRoute>
+                        }
+                    />
+                </Routes>
+            </main>
         </div>
     );
-};
-
-export default App;
+}

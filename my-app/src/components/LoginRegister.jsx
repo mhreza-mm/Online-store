@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import "../style/LoginRegister.css";
+import {useNavigate} from "react-router-dom";
+
 
 const LoginRegister = ({ onLogin }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const navigate=useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,7 +22,6 @@ const LoginRegister = ({ onLogin }) => {
                 body: JSON.stringify({ username, password }),
             });
 
-            // چون بک‌اند ما AuthResponse برمی‌گردونه، مستقیم JSON رو می‌گیریم
             const data = await res.json();
 
             if (!res.ok) {
@@ -27,7 +29,6 @@ const LoginRegister = ({ onLogin }) => {
                 return;
             }
 
-            // ذخیره توکن و اطلاعات کاربر در localStorage
             if (data.token) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("username", data.username);
@@ -39,8 +40,9 @@ const LoginRegister = ({ onLogin }) => {
 
             alert(data.massage || "عملیات موفقیت‌آمیز");
 
-            // به والد اعلام می‌کنیم که کاربر لاگین کرده
+
             onLogin({ name: data.username });
+            navigate("/")
 
         } catch (err) {
             console.error("خطای اتصال:", err);

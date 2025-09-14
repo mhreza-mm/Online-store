@@ -29,5 +29,11 @@ public class Product {
     @JsonProperty("image")
     private String image;
 
+    @Column(name = "type")
+    private String type;
+
+    @Column(name = "brand")
+    private String brand;
+
 
 }

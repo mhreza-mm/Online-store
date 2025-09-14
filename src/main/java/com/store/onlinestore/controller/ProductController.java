@@ -39,7 +39,24 @@ public class ProductController {
     }
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id){
-         productService.deleteProduct(id);
+        productService.deleteProduct(id);
     }
 
+    @GetMapping("/filter")
+    public List<Product> filterProducts(
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String brand
+            ){
+        if (type != null && brand != null){
+            return productService.getByTypeAndBrand(type,brand);
+        }
+        if (type != null){
+            return productService.getByType(type);
+        }
+        if (brand != null){
+            return productService.getByBrand(brand);
+        }else {
+            return productService.getAllProducts();
+        }
+    }
 }

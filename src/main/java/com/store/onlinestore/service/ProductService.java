@@ -28,12 +28,27 @@ public class ProductService {
         existing.setTitle(updatedProduct.getTitle());
         existing.setPrice(updatedProduct.getPrice());
         existing.setImage(updatedProduct.getImage());
+        existing.setType(updatedProduct.getType());
+        existing.setBrand(updatedProduct.getBrand());
         return productRepository.save(existing);
     }
     public void deleteProduct(Long id) {
         Product product = getProductById(id);
         productRepository.delete(product);
     }
+
+    public List<Product> getByType(String type){
+        return productRepository.findByType(type);
+    }
+
+    public List<Product> getByBrand(String brand){
+        return productRepository.findByBrand(brand);
+    }
+
+    public List<Product> getByTypeAndBrand(String brand, String type){
+        return productRepository.findByBrandAndType(brand, type);
+    }
+
 
 
 }
