@@ -24,11 +24,11 @@ export default function App() {
     const [user, setUser] = useState(null);
     const [cart, setCart] = useState([]);
     const [products, setProducts] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    const [page, setPage] = useState(1);
-    const [searchValue, setSearchValue] = useState("");
+    const [page, setPage] = useState(0); // در بک‌اند صفر شروع می‌شود
+    const [totalPages, setTotalPages] = useState(0);
     const [selectedType, setSelectedType] = useState("");
     const [selectedBrand, setSelectedBrand] = useState("");
+    const [searchValue, setSearchValue] = useState("");
     const pageSize = 10;
 
     useEffect(() => {
@@ -37,34 +37,25 @@ export default function App() {
         if (username) setUser({ name: username, role });
     }, []);
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const data = await fetchProducts();
-                setProducts(data);
-                setFilteredProducts(data);
-            } catch (err) {
-                console.error("خطا در دریافت محصولات", err);
-            }
-        })();
-    }, []);
+    const loadProducts = async () => {
+        try {
+            const data = await fetchProducts({
+                page,
+                size: pageSize,
+                type: selectedType,
+                brand: selectedBrand,
+                search: searchValue // ✅ اضافه شد
+            });
+            setProducts(data.content);
+            setTotalPages(data.totalPages);
+        } catch (err) {
+            console.error("خطا در دریافت محصولات", err);
+        }
+    };
 
     useEffect(() => {
-        let data = [...products];
-        if (searchValue.trim()) {
-            data = data.filter((p) =>
-                p.title.toLowerCase().includes(searchValue.toLowerCase())
-            );
-        }
-        if (selectedType) {
-            data = data.filter((p) => p.type === selectedType);
-        }
-        if (selectedBrand) {
-            data = data.filter((p) => p.brand === selectedBrand);
-        }
-        setFilteredProducts(data);
-        setPage(1);
-    }, [products, searchValue, selectedType, selectedBrand]);
+        loadProducts();
+    }, [page, selectedType, selectedBrand, searchValue]); // ✅ searchValue اضافه شد
 
     const handleAddToCart = (product) => {
         if (!user) {
@@ -84,9 +75,6 @@ export default function App() {
     };
 
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    const startIdx = (page - 1) * pageSize;
-    const showProducts = filteredProducts.slice(startIdx, startIdx + pageSize);
-    const totalPages = Math.ceil(filteredProducts.length / pageSize);
 
     return (
         <div className="app-container">
@@ -94,17 +82,18 @@ export default function App() {
                 cartCount={totalItems}
                 user={user}
                 onLogin={setUser}
+                searchValue={searchValue}
+                onSearchChange={setSearchValue}
                 onLogout={() => {
                     setUser(null);
                     setCart([]);
                     localStorage.clear();
                 }}
-                searchValue={searchValue}
-                onSearchChange={setSearchValue}
                 products={products}
                 onFilter={(type, brand) => {
                     setSelectedType(type);
                     setSelectedBrand(brand);
+                    setPage(0); // ریست به صفحه اول
                 }}
             />
 
@@ -115,7 +104,7 @@ export default function App() {
                         element={
                             <>
                                 <ProductList
-                                    products={showProducts}
+                                    products={products}
                                     cart={cart}
                                     onAddToCart={handleAddToCart}
                                     onIncrease={(id) =>
@@ -138,9 +127,9 @@ export default function App() {
                                     }
                                 />
                                 <Pagination
-                                    page={page}
+                                    page={page + 1}
                                     totalPages={totalPages}
-                                    onPageChange={setPage}
+                                    onPageChange={(p) => setPage(p - 1)}
                                 />
                             </>
                         }

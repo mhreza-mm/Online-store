@@ -1,19 +1,21 @@
 // src/api/Products.js
-export const fetchProducts = async () => {
+export const fetchProducts = async ({ page = 0, size = 10, type = "", brand = "", search = "" }) => {
     try {
         const token = localStorage.getItem("token");
         let headers = token ? { "Authorization": `Bearer ${token}` } : {};
 
-        // آدرس کامل بک‌اند
-        const apiUrl = "http://localhost:8080/api/products";
+        const apiUrl = new URL("http://localhost:8080/api/products/paginated");
+        apiUrl.searchParams.append("page", page);
+        apiUrl.searchParams.append("size", size);
+        if (type) apiUrl.searchParams.append("type", type);
+        if (brand) apiUrl.searchParams.append("brand", brand);
+        if (search) apiUrl.searchParams.append("search", search); // ✅ اضافه شد
 
-        // درخواست اولیه با توکن (یا بدون)
         let res = await fetch(apiUrl, { headers });
 
-        // اگر توکن مشکل داشت (401 یا 403)، دوباره بدون هدر درخواست بزن
         if (res.status === 401 || res.status === 403) {
             console.warn("توکن معتبر نیست یا منقضی شده، درخواست بدون احراز هویت ارسال شد");
-            res = await fetch(apiUrl); // بدون هدر Authorization
+            res = await fetch(apiUrl);
         }
 
         if (!res.ok) {
@@ -21,16 +23,10 @@ export const fetchProducts = async () => {
         }
 
         const data = await res.json();
-
-        // اگر داده خالی بود
-        if (!data || data.length === 0) {
-            console.warn("هیچ محصولی از بک‌اند برنگشت.");
-        }
-
         return data;
 
     } catch (error) {
         console.error("خطا در fetchProducts:", error);
-        return []; // برگرداندن آرایه خالی تا UI کرش نکند
+        return { content: [], totalPages: 0, totalElements: 0, page: 0, size: 10 };
     }
 };

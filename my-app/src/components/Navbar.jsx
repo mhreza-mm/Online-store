@@ -23,9 +23,10 @@ export default function Navbar({
             <div className="navbar-middle">
                 <div className="navbar-search-container">
                     <input
+                        data-testid="search-input"
                         className="navbar-search"
                         type="text"
-                        placeholder="جستجو در محصولات..."
+                        placeholder="...جستجو در محصولات"
                         value={searchValue}
                         onChange={(e) => onSearchChange(e.target.value)}
                     />

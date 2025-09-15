@@ -1,41 +1,84 @@
-.filter-bar {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+.market-menu {
+    position: relative;
+    display: inline-block;
 }
 
-.filter-bar select {
-    padding: 6px 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-size: 0.9rem;
-    background-color: white;
+.right-align {
+    float: right;       /* قرارگیری سمت راست */
+}
+
+.market-title {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 8px 12px;
+}
+
+/* منوی کشویی */
+.filter-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0; /* از سمت راست باز شود */
+    min-width: 300px;
+    background-color: rgba(255, 255, 255, 0.85); /* شفاف */
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(224, 224, 224, 0.6);
+    border-radius: 8px;
+    padding: 20px;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* نمایش با Hover */
+.market-menu:hover .filter-dropdown {
+    display: flex;
+    gap: 40px;
+}
+
+.filter-section {
+    flex: 1;
+}
+
+.filter-section h4 {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.filter-section ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.filter-section li {
+    cursor: pointer;
+    font-size: 13px;
+    padding: 6px 0;
+    transition: color 0.2s, font-weight 0.2s;
+}
+
+.filter-section li:hover {
+    color: #e60023;
+}
+
+.filter-section li.active {
+    color: #e60023;
+    font-weight: bold;
+}
+
+/* دکمه حذف فیلترها */
+.clear-filters-btn {
+    align-self: flex-start;
+    padding: 8px 16px;
+    background-color: #e60023;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
     cursor: pointer;
 }
 
-.filter-bar select:hover {
-    border-color: #999;
-}
-
-.filter-bar select:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0px 0px 3px rgba(0, 123, 255, 0.5);
-}
-
-
-@media (max-width: 768px) {
-    .navbar-search-container {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .filter-bar {
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    .filter-bar select {
-        flex: 1;
-    }
+.clear-filters-btn:hover {
+    background-color: #c5001f;
 }
