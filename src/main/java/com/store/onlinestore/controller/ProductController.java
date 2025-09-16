@@ -27,11 +27,12 @@ public class ProductController {
     public PaginationResponse<Product> getProductsPaginated(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String search,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Product> productPage = productService.getProducts(type, brand, pageable);
+        Page<Product> productPage = productService.getProducts(type, brand, search, pageable);
 
         return new PaginationResponse<>(
                 productPage.getContent(),
@@ -42,10 +43,11 @@ public class ProductController {
         );
     }
 
-    // CRUD و متدهای قبلی برای سازگاری
     @GetMapping
     public List<Product> getAllProducts() {
-        return productService.getProducts(null, null, PageRequest.of(0, Integer.MAX_VALUE)).getContent();
+        return productService
+                .getProducts(null, null, null, PageRequest.of(0, Integer.MAX_VALUE))
+                .getContent();
     }
 
     @GetMapping("/{id}")
