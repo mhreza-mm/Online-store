@@ -1,28 +1,42 @@
 .product-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 12px;
-    padding: 15px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    padding: 20px 30px;
     justify-items: center;
 }
 
-/* حالت خالی لیست */
-.product-list-empty {
-    text-align: center;
-    padding: 40px;
-    font-size: 1.1rem;
-    color: #777;
-}
-
-/* ریسپانسیو */
-@media (max-width: 768px) {
+/* لپتاپ متوسط */
+@media (max-width: 1200px) {
     .product-list {
-        gap: 10px;
+        grid-template-columns: repeat(5, 1fr);
     }
 }
 
-@media (max-width: 480px) {
+/* تبلت بزرگ */
+@media (max-width: 992px) {
     .product-list {
-        gap: 8px;
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* تبلت */
+@media (max-width: 768px) {
+    .product-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* موبایل */
+@media (max-width: 576px) {
+    .product-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* موبایل کوچک */
+@media (max-width: 400px) {
+    .product-list {
+        grid-template-columns: 1fr;
     }
 }

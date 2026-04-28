@@ -6,8 +6,10 @@ import UserPanel from "./components/UserPanel";
 import ProductList from "./components/ProductList";
 import Pagination from "./components/Pagination";
 import CartPage from "./components/CartPage";
-import { Routes, Route, Navigate } from "react-router-dom";
+import ProductDetails from "./components/ProductDetails";
+import { Routes, Route, Navigate,useNavigate } from "react-router-dom";
 import { fetchProducts } from "./api/Products";
+import bannerImg from "./assets/baner.png"
 
 const ProtectedRoute = ({ children }) => {
     const token = localStorage.getItem("token");
@@ -21,10 +23,11 @@ const AdminRoute = ({ children }) => {
 };
 
 export default function App() {
+    const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [cart, setCart] = useState([]);
     const [products, setProducts] = useState([]);
-    const [page, setPage] = useState(0); // در بک‌اند صفر شروع می‌شود
+    const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [selectedType, setSelectedType] = useState("");
     const [selectedBrand, setSelectedBrand] = useState("");
@@ -44,7 +47,7 @@ export default function App() {
                 size: pageSize,
                 type: selectedType,
                 brand: selectedBrand,
-                search: searchValue // ✅ اضافه شد
+                search: searchValue
             });
             setProducts(data.content);
             setTotalPages(data.totalPages);
@@ -55,12 +58,12 @@ export default function App() {
 
     useEffect(() => {
         loadProducts();
-    }, [page, selectedType, selectedBrand, searchValue]); // ✅ searchValue اضافه شد
+    }, [page, selectedType, selectedBrand, searchValue]);
 
     const handleAddToCart = (product) => {
         if (!user) {
             alert("برای افزودن به سبد خرید وارد شوید.");
-            window.location.href = "/login";
+            navigate("/login");
             return;
         }
         setCart((prev) => {
@@ -93,16 +96,21 @@ export default function App() {
                 onFilter={(type, brand) => {
                     setSelectedType(type);
                     setSelectedBrand(brand);
-                    setPage(0); // ریست به صفحه اول
+                    setPage(0);
                 }}
             />
 
             <main className="main-content">
                 <Routes>
+
                     <Route
                         path="/"
                         element={
                             <>
+
+                                <div className="homepage-banner">
+                                    <img src={bannerImg} alt={"banner"}/>
+                                </div>
                                 <ProductList
                                     products={products}
                                     cart={cart}
@@ -134,7 +142,36 @@ export default function App() {
                             </>
                         }
                     />
+
+                    <Route
+                        path="/product/:id"
+                        element={
+                            <ProductDetails
+                                onAddToCart={handleAddToCart}
+                                onIncrease={(id) =>
+                                    setCart((prev) =>
+                                        prev.map((i) =>
+                                            i.id === id ? { ...i, quantity: i.quantity + 1 } : i
+                                        )
+                                    )
+                                }
+                                onDecrease={(id) =>
+                                    setCart((prev) =>
+                                        prev
+                                            .map((i) =>
+                                                i.id === id
+                                                    ? { ...i, quantity: Math.max(i.quantity - 1, 0) }
+                                                    : i
+                                            )
+                                            .filter((i) => i.quantity > 0)
+                                    )
+                                }
+                            />
+                        }
+                    />
+
                     <Route path="/login" element={<LoginRegister onLogin={setUser} />} />
+
                     <Route
                         path="/user"
                         element={
@@ -143,6 +180,7 @@ export default function App() {
                             </ProtectedRoute>
                         }
                     />
+
                     <Route
                         path="/admin"
                         element={
@@ -151,6 +189,7 @@ export default function App() {
                             </AdminRoute>
                         }
                     />
+
                     <Route
                         path="/cart"
                         element={
@@ -179,6 +218,7 @@ export default function App() {
                             </ProtectedRoute>
                         }
                     />
+
                 </Routes>
             </main>
         </div>

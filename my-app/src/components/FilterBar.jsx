@@ -7,7 +7,6 @@ export default function FilterBar({ products, onFilter }) {
     const [selectedType, setSelectedType] = useState("");
     const [selectedBrand, setSelectedBrand] = useState("");
 
-    // پر کردن لیست نوع محصول بر اساس محصولات فعلی
     useEffect(() => {
         if (products && products.length) {
             const uniqueTypes = [...new Set(products.map(p => p.type))];
@@ -15,15 +14,14 @@ export default function FilterBar({ products, onFilter }) {
         }
     }, [products]);
 
-    // پر کردن برندها بر اساس نوع انتخاب شده
     useEffect(() => {
         if (selectedType) {
             const filteredBrands = [
                 ...new Set(products.filter(p => p.type === selectedType).map(p => p.brand))
             ];
+
             setBrands(filteredBrands);
 
-            // اصلاح: فقط برند رو خالی کن اگه دیگه وجود نداره
             setSelectedBrand(prev =>
                 filteredBrands.includes(prev) ? prev : ""
             );
@@ -32,10 +30,9 @@ export default function FilterBar({ products, onFilter }) {
         }
     }, [selectedType, products]);
 
-    // اطلاع به والد برای اعمال فیلتر سمت سرور
     useEffect(() => {
         onFilter(selectedType, selectedBrand);
-    }, [selectedType, selectedBrand]); // ⬅ وابستگی products حذف شد
+    }, [selectedType, selectedBrand]);
 
     const clearFilters = () => {
         setSelectedType("");
@@ -44,11 +41,13 @@ export default function FilterBar({ products, onFilter }) {
     };
 
     return (
-        <div className="market-menu right-align">
-            <span className="market-title">فیلتر محصولات</span>
+        <div className="market-menu">
+            <span className="market-title">
+                فیلتر محصولات
+                <span className="filter-icon">▾</span>
+            </span>
 
             <div className="filter-dropdown">
-                {/* ستون نوع محصول */}
                 <div className="filter-section">
                     <h4>نوع محصول</h4>
                     <ul>
@@ -64,7 +63,6 @@ export default function FilterBar({ products, onFilter }) {
                     </ul>
                 </div>
 
-                {/* ستون برند */}
                 <div className="filter-section">
                     <h4>برند</h4>
                     <ul>
@@ -80,7 +78,6 @@ export default function FilterBar({ products, onFilter }) {
                     </ul>
                 </div>
 
-                {/* دکمه حذف فیلتر */}
                 <button onClick={clearFilters} className="clear-filters-btn">
                     حذف فیلترها
                 </button>

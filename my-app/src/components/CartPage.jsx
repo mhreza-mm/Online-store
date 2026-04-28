@@ -30,7 +30,6 @@ export default function CartPage({ cart, onIncrease, onDecrease }) {
               </div>
 
               <p>قیمت واحد: {item.price} $</p>
-              <p>قیمت کل: {(item.price * item.quantity).toFixed(2)} $</p>
             </div>
           </div>
         ))}
